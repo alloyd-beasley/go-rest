@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/krdo-93/go-rest.git/server/handlers"
 )
 
 //Server type
@@ -18,6 +19,8 @@ func (s *Server) Start() {
 
 	s.Router = mux.NewRouter()
 
-	log.Fatal(http.ListenAndServe(":8080", s.Router), )
+	s.Router.HandleFunc("/placeholder", handlers.Placeholder).Methods("GET")
+
+	log.Fatal(http.ListenAndServe(":8080", s.Router))
 	log.Println("server running on port :8080")
 }
