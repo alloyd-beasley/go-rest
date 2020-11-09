@@ -20,8 +20,9 @@ func (s *Server) Start() {
 	s.Router = mux.NewRouter()
 
 	s.Router.HandleFunc("/placeholder", handlers.PlaceholderGET).Methods("GET")
-	s.Router.HandleFunc("/bydate", handlers.Bydate).Methods("GET")
 	s.Router.HandleFunc("/placeholder/post", handlers.PlaceholderPOST).Methods("POST")
+	s.Router.HandleFunc("/bydate", handlers.Bydate).Methods("GET")
+	s.Router.HandleFunc("/getlimit", handlers.Getlimit).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8080", s.Router))
 	log.Println("server running on port :8080")

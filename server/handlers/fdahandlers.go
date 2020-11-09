@@ -29,3 +29,20 @@ func Bydate(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(body)
 }
+
+//Getlimit gets total number of records allowed from openFDA device endpoint
+func Getlimit(w http.ResponseWriter, r *http.Request) {				
+	resp, err := http.Get("https://api.fda.gov/device/event.json?limit=1000")
+	if err != nil {
+		log.Panic(err)
+	}
+	defer resp.Body.Close()
+	
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(body)
+}
