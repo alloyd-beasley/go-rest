@@ -12,32 +12,21 @@ const (
 )
 
 type DeviceOpenFda struct {
-	DeviceName                  string
-	MedicalSpecialtyDescription string
-	DeviceClass                 DeviceClass
-	RegulationNumber            float32
+	DeviceName                  string      `json:"device_name"`
+	MedicalSpecialtyDescription string      `json:"medical_specialty_description"`
+	DeviceClass                 DeviceClass `json:"device_class"`
+	RegulationNumber            string      `json:"regulation_number"`
 }
 
 type Device struct {
-	ManufacturerDAddress1         string
-	DeviceSequenceNumber          uint16
-	ManufacturerDState            string
-	ManufacturerDPostalCode       uint16
-	ManufacturerDCity             string
-	LotNumber                     string
-	ModelNumber                   string
-	DeviceReportProductCode       string
-	DeviceOperator                string
-	OtherIdNumber                 uint16
-	GenericName                   string
-	ManufacturerDName             string
-	ManufacturerDCountry          string
-	BrandName                     string
-	OpenFda                       DeviceOpenFda
-	DeviceAgeText                 string
-	DeviceEvaluatedByManufacturer string
-	CatalogNumber                 string
-	Baseline510kExemptFlag        string
-	ImplantFlag                   string
-	DateRemovedFlag               string
+	ManufacturerDAddress1   string `json:"manufacturer_d_address_1"`
+	ManufacturerDState      string `json:"manufacturer_d_state"`
+	ManufacturerDPostalCode string `json:"manufacturer_d_Postal_code"`
+	ManufacturerDCity       string `json:"manufacturer_d_City"`
+	ManufacturerDCountry    string `json:"manufacturer_d_Country"`
+	ManufacturerDName       string `json:"manufacturer_d_Name"`
+	LotNumber               string `json:"lot_number"`
+	ModelNumber             string `json:"model_number"`
+	GenericName             string `json:"generic_name"`
+	BrandName               string `json:"brand_name"`
 }

@@ -9,6 +9,6 @@ const (
 )
 
 type MdrText struct {
-	TextTypeCode textTypeCode
-	Text         string
+	TextTypeCode string `json:"text_type_code"`
+	Text         string `json:"text"`
 }

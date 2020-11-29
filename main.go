@@ -1,9 +1,16 @@
 package main
 
-import "github.com/krdo-93/go-rest.git/server"
+import (
+	"log"
+	"net/http"
+
+	"github.com/krdo-93/go-rest.git/server"
+)
 
 func main() {
-	var server *server.Server = &server.Server{}
+	server := server.NewFDAServer()
 
-	server.Start()
+	if err := http.ListenAndServe(":5000", server); err != nil {
+		log.Fatalf("could not listenon port 5000 %v", err)
+	}
 }
