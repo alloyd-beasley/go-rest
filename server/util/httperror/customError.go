@@ -33,7 +33,7 @@ func (e *HTTPError) Error() string {
 		return e.Message
 	}
 
-	return e.Error()
+	return e.Actual.Error()
 }
 
 //ResponseBody returns body of error if provided, or generic error

@@ -1,6 +1,7 @@
 package fdacontrollers
 
 import (
+	"strings"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -19,9 +20,9 @@ func GetLimit(w http.ResponseWriter, r *http.Request) error {
 		return httperror.NewHTTPError(nil, "This HTTP Method is not allowed", 405)
 	}
 
-	limit := r.URL.Query().Get("limit")
+	limit := strings.TrimSpace(r.URL.Query().Get("limit"))
 
-	if _, err := strconv.Atoi(limit); err != nil {
+	if _, err := strconv.Atoi(limit); err != nil && len(limit) != 0{
 		return httperror.NewHTTPError(err, "Limit query must be an integer", 400)
 	}
 
