@@ -11,7 +11,7 @@ import (
 	"github.com/krdo-93/go-rest.git/server/util/httperror"
 )
 
-//FdaRootController defines type for controlle wrapper
+//FdaRootController defines type for controller wrapper
 type FdaRootController func(w http.ResponseWriter, r *http.Request) error
 
 //GetLimit returns number of records corresponding to limit query
