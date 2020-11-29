@@ -11,15 +11,18 @@ import (
 	"github.com/krdo-93/go-rest.git/server/util/httperror"
 )
 
+const deviceEventURL = "https://api.fda.gov/device/event.json"
+
 //GetLimit retrieves records by limit
 func GetLimit(limit string) ([]MAUDE.MAUDEResults, error) {
-
-	requestURL := fmt.Sprintf("https://api.fda.gov/device/event.json?limit=%s", limit)
+	
+	query := fmt.Sprintf("?limit=%s", limit)
+	requestURL := fmt.Sprintf(deviceEventURL+"%s", query)
 	resp, err := http.Get(requestURL)
 
 	if err != nil {
 		log.Println("Error making request to FDA API")
-		return nil, fmt.Errorf("Something went wrong when making the request %v: ", err)
+		return nil, fmt.Errorf("Something went wrong when making the request: %v", err)
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
@@ -27,35 +30,35 @@ func GetLimit(limit string) ([]MAUDE.MAUDEResults, error) {
 
 	if err != nil {
 		log.Println("Error reading response body from FDA API")
-		return nil, fmt.Errorf("Something went wrong when reading the response body%v: ", err)
+		return nil, fmt.Errorf("Something went wrong when reading the response body: %v", err)
 	}
 
 	response := MAUDE.Response{}
 	err = json.Unmarshal(body, &response)
 
 	if err != nil {
-		return nil, httperror.NewHTTPError(err, "Something went wrong while Unmarshaling response json", 400)
+		return nil, httperror.NewHTTPError(err, "Something went wrong while Unmarshalling response json", 400)
 	}
 
 	var results []MAUDE.MAUDEResults
 
 	for _, v := range response.Results {
 		r := MAUDE.MAUDEResults{
-			v.EventLocation,
-			v.ReportToFda,
-			v.EventType,
-			v.ReportNumber,
-			v.TypeOfReport,
-			v.ProductProblemFlag,
-			v.DateReceived,
-			v.DateOfEvent,
-			v.ReportDate,
-			v.DateFacilityAware,
-			v.Device,
-			v.Patient,
-			v.NumberDevicesInEvent,
-			v.MdrText,
-			v.ManufacturerName,
+			EventLocation:        v.EventLocation,
+			ReportToFda:          v.ReportToFda,
+			EventType:            v.EventType,
+			ReportNumber:         v.ReportNumber,
+			TypeOfReport:         v.TypeOfReport,
+			ProductProblemFlag:   v.ProductProblemFlag,
+			DateReceived:         v.DateReceived,
+			DateOfEvent:          v.DateOfEvent,
+			ReportDate:           v.ReportDate,
+			DateFacilityAware:    v.DateFacilityAware,
+			Device:               v.Device,
+			Patient:              v.Patient,
+			NumberDevicesInEvent: v.NumberDevicesInEvent,
+			MdrText:              v.MdrText,
+			ManufacturerName:     v.ManufacturerName,
 		}
 
 		results = append(results, r)
