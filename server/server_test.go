@@ -18,7 +18,7 @@ func TestGetTotal(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		_, err := ioutil.ReadAll(response.Body)
-		
+
 		if err != nil {
 			t.Errorf("Error reading response body v%v: ", err)
 		}
@@ -26,6 +26,6 @@ func TestGetTotal(t *testing.T) {
 		if response.Code != 200 {
 			fmt.Printf("CODE %v", response.Code)
 			t.Errorf("response not 200")
-		}		
+		}
 	})
 }

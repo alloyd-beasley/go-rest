@@ -4,39 +4,42 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/krdo-93/go-rest.git/server/models/MAUDE"
+	"github.com/krdo-93/go-rest.git/server/util/httperror"
 )
 
-func GetLimit(w http.ResponseWriter, r *http.Request) {
+//GetLimit retrieves records by limit
+func GetLimit(limit string) ([]MAUDE.MAUDEResults, error) {
 
-	limit := r.URL.Query().Get("limit")
-	requestUrl := fmt.Sprintf("https://api.fda.gov/device/event.json?limit=%s", limit)
-	resp, err := http.Get(requestUrl)
+	requestURL := fmt.Sprintf("https://api.fda.gov/device/event.json?limit=%s", limit)
+	resp, err := http.Get(requestURL)
 
 	if err != nil {
-		fmt.Errorf("Something went wrong %v: ", err)
+		log.Println("Error making request to FDA API")
+		return nil, fmt.Errorf("Something went wrong when making the request %v: ", err)
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 
 	if err != nil {
-		fmt.Errorf("Something went wrong %v: ", err)
+		log.Println("Error reading response body from FDA API")
+		return nil, fmt.Errorf("Something went wrong when reading the response body%v: ", err)
 	}
 
 	response := MAUDE.Response{}
 	err = json.Unmarshal(body, &response)
 
 	if err != nil {
-		fmt.Errorf("Something went wrong %v: ", err)
+		return nil, httperror.NewHTTPError(err, "Something went wrong while Unmarshaling response json", 400)
 	}
 
 	var results []MAUDE.MAUDEResults
 
-	for i, v := range response.Results {
-		fmt.Printf("i %v", string(i))
+	for _, v := range response.Results {
 		r := MAUDE.MAUDEResults{
 			v.EventLocation,
 			v.ReportToFda,
@@ -57,12 +60,6 @@ func GetLimit(w http.ResponseWriter, r *http.Request) {
 
 		results = append(results, r)
 	}
-	output, err := json.Marshal(results)
 
-	if err != nil {
-		fmt.Errorf("Something went wrong %v: ", err)
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(output)
+	return results, nil
 }
