@@ -1,4 +1,4 @@
-package handlers
+package fdahandlers
 
 import (
 	"encoding/json"
@@ -7,15 +7,15 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/krdo-93/go-rest.git/server/models/MAUDE"
-	"github.com/krdo-93/go-rest.git/server/util/httperror"
+	"github.com/alloyd-beasley/go-rest.git/models/MAUDE"
+	"github.com/alloyd-beasley/go-rest.git/util"
 )
 
 const deviceEventURL = "https://api.fda.gov/device/event.json"
 
 //GetLimit retrieves records by limit
 func GetLimit(limit string) ([]MAUDE.MAUDEResults, error) {
-	
+
 	query := fmt.Sprintf("?limit=%s", limit)
 	requestURL := fmt.Sprintf(deviceEventURL+"%s", query)
 	resp, err := http.Get(requestURL)

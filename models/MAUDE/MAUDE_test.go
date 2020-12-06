@@ -7,7 +7,7 @@ import (
 	"os"
 	"testing"
 
-	// "github.com/krdo-93/go-rest.git/server/models"
+	// "github.com/alloyd-beasley/go-rest.git/server/models"
 )
 
 func TestDecodeJsonToMaude(t *testing.T) {

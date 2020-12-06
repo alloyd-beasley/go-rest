@@ -1,7 +1,7 @@
 package MAUDE
 
 import (
-	"github.com/krdo-93/go-rest.git/server/models"
+	"github.com/alloyd-beasley/go-rest.git/models"
 )
 
 type sourceType string
@@ -55,21 +55,21 @@ type MAUDEResponse struct {
 }
 
 type MAUDEResults struct {
-	EventLocation        string           
-	ReportToFda          string           
-	EventType            string           
-	ReportNumber         string           
-	TypeOfReport         []string         
-	ProductProblemFlag   string           
-	DateReceived         string           
-	DateOfEvent          string           
-	ReportDate           string           
-	DateFacilityAware    string           
-	Device               []models.Device  
-	Patient              []models.Patient 
-	NumberDevicesInEvent string           
-	MdrText              []models.MdrText 
-	ManufacturerName     string           
+	EventLocation        string
+	ReportToFda          string
+	EventType            string
+	ReportNumber         string
+	TypeOfReport         []string
+	ProductProblemFlag   string
+	DateReceived         string
+	DateOfEvent          string
+	ReportDate           string
+	DateFacilityAware    string
+	Device               []models.Device
+	Patient              []models.Patient
+	NumberDevicesInEvent string
+	MdrText              []models.MdrText
+	ManufacturerName     string
 }
 
 type Response struct {

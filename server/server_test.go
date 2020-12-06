@@ -20,13 +20,13 @@ func formatResponseCodeErrorMessage(t *testing.T, message string, code int) {
 }
 
 func TestGetLimit(t *testing.T) {
-	server := NewFDAServer()
+	server := new(Server)
+	server.routes()
 
 	t.Run("Response code 200 for valid request of default limit", func(t *testing.T) {
 		request, _ := http.NewRequest(http.MethodGet, "/getlimit", nil)
 		response := httptest.NewRecorder()
-
-		server.ServeHTTP(response, request)
+		server.router.ServeHTTP(response, request)
 
 		if response.Code != 200 {
 			formatResponseCodeErrorMessage(t, "valid request of default limit", response.Code)
@@ -39,7 +39,7 @@ func TestGetLimit(t *testing.T) {
 		request, _ := http.NewRequest(http.MethodGet, "/getlimit?limit=2", nil)
 		response := httptest.NewRecorder()
 
-		server.ServeHTTP(response, request)
+		server.router.ServeHTTP(response, request)
 
 		if response.Code != 200 {
 			formatResponseCodeErrorMessage(t, "valid request of linit 2", response.Code)
@@ -52,7 +52,7 @@ func TestGetLimit(t *testing.T) {
 		request, _ := http.NewRequest(http.MethodPost, "/getlimit", nil)
 		response := httptest.NewRecorder()
 
-		server.ServeHTTP(response, request)
+		server.router.ServeHTTP(response, request)
 
 		if response.Code != 405 {
 			formatResponseCodeErrorMessage(t, "invalid method request", response.Code)
@@ -65,7 +65,7 @@ func TestGetLimit(t *testing.T) {
 		request, _ := http.NewRequest(http.MethodGet, "/getlimit?limit=xxx", nil)
 		response := httptest.NewRecorder()
 
-		server.ServeHTTP(response, request)
+		server.router.ServeHTTP(response, request)
 
 		if response.Code != 400 {
 			formatResponseCodeErrorMessage(t, "invalid query param", response.Code)
