@@ -75,6 +75,3 @@ type MAUDEResults struct {
 type Response struct {
 	Results []MAUDEResponse
 }
-
-
-

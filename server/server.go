@@ -24,7 +24,7 @@ type Server struct {
 	db     *sql.DB
 }
 
-//Init intializes new server
+//Initialize intializes new server
 func Initialize() {
 	server := new(Server)
 	server.routes()

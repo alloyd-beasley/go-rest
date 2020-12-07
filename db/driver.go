@@ -8,10 +8,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var db *sql.DB
-
+//Initialize database with AWS secret manager
 func Initialize() *sql.DB {
-
+	var db *sql.DB
 	secrets, err := GetSecret()
 
 	if err != nil {

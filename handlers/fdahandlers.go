@@ -8,7 +8,7 @@ import (
 	"net/http"
 
 	"github.com/alloyd-beasley/go-rest.git/models/MAUDE"
-	"github.com/alloyd-beasley/go-rest.git/util"
+	httperror "github.com/alloyd-beasley/go-rest.git/util"
 )
 
 const deviceEventURL = "https://api.fda.gov/device/event.json"
