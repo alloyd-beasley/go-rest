@@ -1,16 +1,33 @@
 package db
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
+	"strings"
 
 	"github.com/alloyd-beasley/go-rest.git/models"
 )
 
-func parseTime(item string) string {
-	layout := "2006-01-02"
+//ParseTime parses MAUDE dates to "YY-MM-DD"
+func ParseDate(item string) (string, error) {
+	//MAUDE dates look like: "YYMMDD"
 
-	return layout
+	if len(item) < 1 {
+		log.Print("Empty string passed to parser ParseTime")
+		return "", fmt.Errorf("Tried to parse empty string")
+	}
+
+	itemSlice := strings.Split(item, "")
+
+	year := strings.Join(itemSlice[:4], "")
+	month := strings.Join(itemSlice[4:6], "")
+	day := strings.Join(itemSlice[6:8], "")
+
+	date := fmt.Sprintf("%v-%v-%v", year, month, day)
+
+	return date, nil
 }
 
 func insertReport() {
@@ -60,6 +77,12 @@ func insertReport() {
 			log.Fatalf("Error inserting text: %v", tErr)
 		}
 
+		_, dateReceived := ParseDate(v.Date_received)
+		_, dateOfEvent := ParseDate(v.Date_of_event)
+		_, reportDate := ParseDate(v.Report_date)
+		_, dateFacilityAware := ParseDate(v.Date_facility_aware)
+		_, numberDevicesInEvent := strconv.Atoi(v.Number_devices_in_event)
+
 		_, rErr := db.Exec(string(reportStatment),
 			v.Event_location,
 			v.Report_to_fda,
@@ -67,11 +90,11 @@ func insertReport() {
 			v.Report_number,
 			v.Type_of_report,
 			v.Product_problem_flag,
-			v.Date_received,
-			v.Date_of_event,
-			v.Report_date,
-			v.Date_facility_aware,
-			v.Number_devices_in_event,
+			dateReceived,
+			dateOfEvent,
+			reportDate,
+			dateFacilityAware,
+			numberDevicesInEvent,
 			v.Manufacturer_name,
 			deviceID,
 			textID,
