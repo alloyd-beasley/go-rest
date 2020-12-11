@@ -24,7 +24,12 @@ func getSetcretMap(secrets []byte) (map[string]interface{}, error) {
 	return secretMap, nil
 }
 
-//GetSecret returns AWS secret. Example taken from AWS.
+/*
+GetSecret returns AWS secret. Example taken from AWS.
+
+reference to example test on github:
+https://github.com/aws/aws-sdk-go/blob/0d67c31d847a611f29e5870762e8bd751fc77f62/service/secretsmanager/examples_test.go#L295
+*/
 func GetSecret() (map[string]interface{}, error) {
 	secretName := os.Getenv("F_DB_SECRET_NAME")
 	region := os.Getenv("RDS_DEFAULT_REGION")
