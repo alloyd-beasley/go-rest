@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 )
 
@@ -28,20 +27,17 @@ type Response struct {
 	Results []Report
 }
 
-func (r Response) Parse(data []byte) ([]Report, error) {
+func (r Response) Parse(data []byte) []Report {
 
 	var report []Report
 
 	if err := json.Unmarshal(data, &r); err != nil {
-		log.Println("There was problem parsing a report: ", err)
-		return nil, fmt.Errorf("There was a problem parsing your report: %v", err)
+		log.Fatal("There was a problem parsing your report: %v", err)
 	}
 
 	for _, v := range r.Results {
 		report = append(report, v)
 	}
 
-	fmt.Printf("%+v", report)
-
-	return report, nil
+	return report
 }

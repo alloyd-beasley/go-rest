@@ -26,7 +26,6 @@ func Initialize() *sql.DB {
 
 	dbConn := fmt.Sprintf("host=%s port=%g user=%s dbname=%s sslmode=require password=%s", host, port, user, name, pass)
 	db, dbErr := sql.Open("postgres", dbConn)
-	defer db.Close()
 
 	if dbErr != nil {
 		log.Fatal("Encountered an issue when establishing initial connection to DB: ", dbErr)

@@ -18,9 +18,8 @@ create table maude_report
     device_id_fk            integer not null
         constraint device_id_fk
             references device,
-    mdr_text_id_fk          integer not null
-        constraint mdr_text_id_fk
-            references mdr_text
+    text_type_code          text,
+    mdr_text                text
 );
 
 create unique index maude_report_device_id_fk_uindex
