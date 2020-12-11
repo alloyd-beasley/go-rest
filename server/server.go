@@ -11,7 +11,6 @@ import (
 	"github.com/alloyd-beasley/go-rest.git/db"
 
 	fdahandlers "github.com/alloyd-beasley/go-rest.git/handlers"
-	httperror "github.com/alloyd-beasley/go-rest.git/util"
 	"github.com/gorilla/mux"
 )
 

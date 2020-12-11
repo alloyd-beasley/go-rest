@@ -1,46 +1,29 @@
 package db
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"strconv"
-	"strings"
 
 	"github.com/alloyd-beasley/go-rest.git/models"
 )
-
-//ParseTime parses MAUDE dates to "YY-MM-DD"
-func ParseDate(item string) string {
-	//MAUDE dates look like: "YYMMDD"
-
-	if len(item) < 1 {
-		log.Fatal("Tried to parse empty string")
-	}
-
-	itemSlice := strings.Split(item, "")
-
-	year := strings.Join(itemSlice[:4], "")
-	month := strings.Join(itemSlice[4:6], "")
-	day := strings.Join(itemSlice[6:8], "")
-
-	date := fmt.Sprintf("%v-%v-%v", year, month, day)
-
-	return date
-}
 
 //InsertReportFromFile inserts raw data from given file
 func InsertReport(data []byte) error {
 	db := Initialize()
 	defer db.Close()
 
-	response := models.Response{}
-	results := response.Parse(data)
+	response := &models.Response{}
+
+	if err := response.Parse(data); err != nil {
+		log.Printf("Error inserting device: %v, %v", err, err.Error())
+		return err
+	}
 
 	reportStatment, _ := ioutil.ReadFile("./statements/insert_report.sql")
 	deviceStatement, _ := ioutil.ReadFile("./statements/insert_device.sql")
 
-	for _, v := range results {
+	for _, v := range response.Results {
 
 		var deviceID int
 
@@ -71,10 +54,10 @@ func InsertReport(data []byte) error {
 			v.Report_number,
 			v.Type_of_report[0],
 			v.Product_problem_flag,
-			ParseDate(v.Date_received),
-			ParseDate(v.Date_of_event),
-			ParseDate(v.Report_date),
-			ParseDate(v.Date_facility_aware),
+			v.Date_received,
+			v.Date_of_event,
+			v.Report_date,
+			v.Date_facility_aware,
 			numberDevicesInEvent,
 			v.Manufacturer_name,
 			deviceID,

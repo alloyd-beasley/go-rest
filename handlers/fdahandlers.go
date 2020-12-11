@@ -6,15 +6,14 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/alloyd-beasley/go-rest.git/httperror"
 	"github.com/alloyd-beasley/go-rest.git/models"
-
-	httperror "github.com/alloyd-beasley/go-rest.git/util"
 )
 
 const deviceEventURL = "https://api.fda.gov/device/event.json"
 
 //GetLimit retrieves records by limit
-func GetLimit(limit string) ([]models.Report, error) {
+func GetLimit(limit string) (*models.Response, error) {
 
 	query := fmt.Sprintf("?limit=%s", limit)
 	requestURL := fmt.Sprintf(deviceEventURL+"%s", query)
@@ -33,12 +32,12 @@ func GetLimit(limit string) ([]models.Report, error) {
 		return nil, fmt.Errorf("Something went wrong when reading the response body: %v", err)
 	}
 
-	response := models.Response{}
-	report, err := response.Parse(body)
+	response := &models.Response{}
+	err = response.Parse(body)
 
 	if err != nil {
 		return nil, httperror.NewHTTPError(err, "Something went wrong while Unmarshalling response json", 400)
 	}
 
-	return report, nil
+	return response, nil
 }

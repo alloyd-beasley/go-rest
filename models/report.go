@@ -3,6 +3,8 @@ package models
 import (
 	"encoding/json"
 	"log"
+
+	"github.com/alloyd-beasley/go-rest.git/common"
 )
 
 //Report defines MAUDE report
@@ -27,17 +29,19 @@ type Response struct {
 	Results []Report
 }
 
-func (r Response) Parse(data []byte) []Report {
-
-	var report []Report
+func (r *Response) Parse(data []byte) error {
 
 	if err := json.Unmarshal(data, &r); err != nil {
-		log.Fatal("There was a problem parsing your report: %v", err)
+		log.Printf("There was a problem parsing your report: %v, %v", err, err.Error())
+		return err
 	}
 
 	for _, v := range r.Results {
-		report = append(report, v)
+		v.Date_received = common.ParseDate(v.Date_received)
+		v.Date_of_event = common.ParseDate(v.Date_of_event)
+		v.Report_date = common.ParseDate(v.Report_date)
+		v.Date_facility_aware = common.ParseDate(v.Date_facility_aware)
 	}
 
-	return report
+	return nil
 }
