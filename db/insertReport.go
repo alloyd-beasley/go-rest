@@ -8,26 +8,35 @@ import (
 	"github.com/alloyd-beasley/go-rest.git/models"
 )
 
-//InsertReportFromFile inserts raw data from given file
-func InsertReport(data []byte) error {
-	db := Initialize()
-	defer db.Close()
+//InsertReport inserts record as Report type
+func (db DB) InsertReport(data []byte) error {
 
 	response := &models.Response{}
 
 	if err := response.Parse(data); err != nil {
-		log.Printf("Error inserting device: %v, %v", err, err.Error())
+		log.Print("Error when parsing data to report: ", err.Error())
 		return err
 	}
 
-	reportStatment, _ := ioutil.ReadFile("./statements/insert_report.sql")
-	deviceStatement, _ := ioutil.ReadFile("./statements/insert_device.sql")
+	reportStatment, err := ioutil.ReadFile("./statements/insert_report.sql")
+
+	if err != nil {
+		log.Print("Error when reading statement from file: ", err.Error())
+		return err
+	}
+
+	deviceStatement, err := ioutil.ReadFile("./statements/insert_device.sql")
+
+	if err != nil {
+		log.Print("Error when reading statement from file: ", err.Error())
+		return err
+	}
 
 	for _, v := range response.Results {
 
 		var deviceID int
 
-		deviceErr := db.QueryRow(string(deviceStatement),
+		err = db.Connection.QueryRow(string(deviceStatement),
 			v.Device[0].Manufacturer_d_address_1,
 			v.Device[0].Manufacturer_d_state,
 			v.Device[0].Manufacturer_d_Postal_code,
@@ -40,14 +49,12 @@ func InsertReport(data []byte) error {
 			v.Device[0].Brand_name,
 		).Scan(&deviceID)
 
-		if deviceErr != nil {
-			log.Printf("Error inserting device: %v, %v", deviceErr, deviceErr.Error())
-			return deviceErr
+		if err != nil {
+			log.Printf("Error inserting device: %v, %v", err, err.Error())
+			return err
 		}
 
-		numberDevicesInEvent, _ := strconv.Atoi(v.Number_devices_in_event)
-
-		_, reportErr := db.Exec(string(reportStatment),
+		_, reportErr := db.Connection.Exec(string(reportStatment),
 			v.Event_location,
 			v.Report_to_fda,
 			v.Event_type,
