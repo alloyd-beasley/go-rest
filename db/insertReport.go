@@ -3,7 +3,6 @@ package db
 import (
 	"io/ioutil"
 	"log"
-	"strconv"
 
 	"github.com/alloyd-beasley/go-rest.git/models"
 )
@@ -11,9 +10,10 @@ import (
 //InsertReport inserts record as Report type
 func (db DB) InsertReport(data []byte) error {
 
-	response := &models.Response{}
+	model := &models.FDAResponse{}
+	parsed, err := model.Parse(data)
 
-	if err := response.Parse(data); err != nil {
+	if err != nil {
 		log.Print("Error when parsing data to report: ", err.Error())
 		return err
 	}
@@ -32,7 +32,7 @@ func (db DB) InsertReport(data []byte) error {
 		return err
 	}
 
-	for _, v := range response.Results {
+	for _, v := range parsed {
 
 		var deviceID int
 
@@ -65,7 +65,7 @@ func (db DB) InsertReport(data []byte) error {
 			v.Date_of_event,
 			v.Report_date,
 			v.Date_facility_aware,
-			numberDevicesInEvent,
+			v.Number_devices_in_event,
 			v.Manufacturer_name,
 			deviceID,
 			v.Mdr_text[0].Text_type_code,
