@@ -80,3 +80,42 @@ func (db DB) InsertReport(data []byte) error {
 
 	return nil
 }
+
+func (db DB) GetAllReports() error {
+	statement, err := ioutil.ReadFile("./statements/select_all_reports.sql")
+
+	if err != nil {
+		log.Print("Error when reading statement from file: ", err.Error())
+		return err
+	}
+
+	rows, err := db.Connection.Query(string(statement))
+	defer rows.Close()
+
+	if err != nil {
+		log.Print("Error when selecting reports: ", err.Error())
+		return err
+	}
+
+	var results []models.Report
+
+	for rows.Next() {
+		report := models.Report{}
+		if err := rows.Scan(&report); err != nil {
+			log.Print("Error scanning row to Report: ", err)
+			return err
+		}
+
+		results = append(results, report)
+	}
+
+	return nil
+}
+
+func (db DB) GetReportById() error {
+	return nil
+}
+
+func (db DB) GetReportByDateRange() error {
+	return nil
+}

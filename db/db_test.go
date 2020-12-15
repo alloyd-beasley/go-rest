@@ -34,7 +34,7 @@ func TestGetReportById(t *testing.T) {
 
 func TestGetReportByDate(t *testing.T) {
 	date := "1992-03-10"
-	if err := db.GetReportByDate(); err != nil {
+	if err := db.GetReportByDateRange(); err != nil {
 		t.Error("Error selectingreports by date: ", date, err)
 	}
 }
